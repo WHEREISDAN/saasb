@@ -35,7 +35,8 @@ Before you begin, ensure you have met the following requirements:
 - Stripe account with API keys
 
 ### Installation
-1. Clone the repository:```bash
+1. Clone the repository:
+```bash
 git clone https://github.com/yourusername/saas-boilerplate.git
 cd saas-boilerplate
 ```
