@@ -1,7 +1,8 @@
 "use client";
 import { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/firebase/config';
+import { auth, db } from '@/firebase/config';
+import { doc, setDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
@@ -16,7 +17,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const router = useRouter()
-  
+
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (password !== confirmPassword) {
@@ -24,12 +25,26 @@ export default function SignupPage() {
       return
     }
     try {
-        console.log(`email: ${email}, password: ${password}`)
-        await createUserWithEmailAndPassword(auth, email, password)
+      console.log(`email: ${email}, password: ${password}`)
+      const result = await createUserWithEmailAndPassword(auth, email, password)
 
-        router.push("/dashboard")
+      if (result.user) {
+        const userDoc = doc(db, "users", result.user.uid)
+        await setDoc(userDoc, {
+          email: email,
+          role: "user",
+          stripeId: null,
+          subscriptionId: null,
+          subscriptionStatus: null,
+          createdAt: Date.now()
+        })
+      } else {
+        throw new Error("User not found")
+      }
+
+      router.push("/dashboard")
     } catch (error) {
-        console.log('Error signing up', error)
+      console.log('Error signing up', error)
     }
   }
 

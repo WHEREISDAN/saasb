@@ -4,11 +4,29 @@
 import { useAuth } from '../../hooks/useAuth';
 import { auth } from '@/firebase/config';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
 
 export default function Dashboard() {
   const { user, loading } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  const handleUpgrade = async (priceId: string) => {
+    setIsLoading(true);
+    const res = await fetch('/api/checkout', {
+        method: 'POST',
+        body: JSON.stringify({ priceId }),
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    const data = await res.json();
+    const stripe = await stripePromise;
+    await stripe?.redirectToCheckout({ sessionId: data.sessionId });
+    setIsLoading(false);
+  }
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -39,10 +57,11 @@ export default function Dashboard() {
           Sign Out
         </button>
         <button
-          onClick={() => router.push('/upgrade')}
+          onClick={() => handleUpgrade(process.env.NEXT_PUBLIC_STRIPE_PRICE_ID as string)}
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+          disabled={isLoading}
         >
-          Upgrade Account
+          {isLoading ? 'Loading...' : 'Upgrade Account'}
         </button>
       </div>
     </div>

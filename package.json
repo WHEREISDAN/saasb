@@ -19,6 +19,7 @@
     "firebase": "^10.13.2",
     "firebase-admin": "^12.5.0",
     "lucide-react": "^0.446.0",
+    "micro": "^10.0.1",
     "next": "14.2.13",
     "react": "^18",
     "react-dom": "^18",
