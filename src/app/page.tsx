@@ -81,7 +81,7 @@ export default function ModernLandingPage() {
               { Icon: CreditCardIcon, title: 'Stripe Integration', description: 'Easily implement payment processing and subscription management with Stripe.' },
               { Icon: LockIcon, title: 'Authentication Ready', description: 'Pre-built authentication flows for quick and secure user management.' },
               { Icon: SmartphoneIcon, title: 'Responsive Design', description: 'Mobile-first approach ensures your app looks great on all devices.' },
-              { Icon: PaintbrushIcon, title: 'Customizable Theme', description: 'Easily adjust the look and feel to match your brand identity.' },
+              { Icon: PaintbrushIcon, title: 'Customizable Theme', description: 'This isnt true, but I wanted to even out the number of features 😂' },
             ].map((feature, index) => (
               <Card key={index} className="bg-[#FFE5E5] border-none hover:shadow-md transition-shadow">
                 <CardHeader>
