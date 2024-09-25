@@ -1,4 +1,9 @@
+'use client';
+import Navigation from '@/components/Navigation'
 import Link from 'next/link'
+import { useAuth } from '@/hooks/useAuth';
+import { auth } from '@/firebase/config';
+import { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -13,31 +18,16 @@ import {
 } from 'lucide-react'
 
 export default function ModernLandingPage() {
+  const { user, loading } = useAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    setIsAuthenticated(user !== null);
+  }, [user]);
+
   return (
     <div className="min-h-screen bg-[#FFFFFF] text-[#333333] flex flex-col items-center">
-      {/* Navigation */}
-      <header className="sticky top-0 z-50 w-full border-b border-[#FFE5E5] bg-[#FFFFFF]/80 backdrop-blur-sm">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Flame className="h-6 w-6 text-[#FF6F61]" />
-            <span className="text-xl font-bold text-[#FF6F61]">SaaSBoiler</span>
-          </div>
-          <nav className="flex items-center space-x-4">
-            <Link href="#features" className="text-sm font-medium hover:text-[#FF6F61] transition-colors">
-              Features
-            </Link>
-            <Link href="#pricing" className="text-sm font-medium hover:text-[#FF6F61] transition-colors">
-              Pricing
-            </Link>
-            <Link href="/signup">
-              <Button variant="outline" className="border-[#FF6F61] text-[#FF6F61] hover:bg-[#FFE5E5] hover:text-[#FF6F61]">
-                Sign Up
-              </Button>
-            </Link>
-          </nav>
-        </div>
-      </header>
-
+      <Navigation isAuthenticated={isAuthenticated ?? false} />
       {/* Main content wrapper */}
       <main className="flex-grow w-full">
         {/* Bento Box Layout */}

@@ -1,4 +1,5 @@
 "use client"
+import Navigation from '@/components/Navigation'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -29,20 +30,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-[#FFFFFF] text-[#333333] flex flex-col">
-      {/* Navigation */}
-      <header className="w-full border-b border-[#FFE5E5] bg-[#FFFFFF]/80 backdrop-blur-sm">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Flame className="h-6 w-6 text-[#FF6F61]" />
-            <span className="text-xl font-bold text-[#FF6F61]">SaaSBoiler</span>
-          </div>
-          <Link href="/" className="flex items-center text-sm font-medium hover:text-[#FF6F61] transition-colors">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
-          </Link>
-        </div>
-      </header>
-
+      <Navigation showBackButton={true} />
       {/* Main content */}
       <main className="flex-grow flex items-center justify-center px-4 py-12">
         <Card className="w-full max-w-md bg-[#FFE5E5] border-none">

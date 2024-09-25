@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { stripe } from '@/stripe/config';
 
 export async function POST(req: Request) {
-  const { priceId } = await req.json();
+  const { priceId, metadata } = await req.json();
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -13,6 +13,7 @@ export async function POST(req: Request) {
           quantity: 1,
         },
       ],
+      metadata: metadata,
       mode: 'subscription',
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`,
