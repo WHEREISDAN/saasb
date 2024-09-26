@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Flame, ArrowLeft } from 'lucide-react'
 import Navigation from '@/components/Navigation'
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function SignupPage() {
   const [email, setEmail] = useState("")
@@ -26,25 +27,29 @@ export default function SignupPage() {
       return
     }
     try {
-      const result = await createUserWithEmailAndPassword(auth, email, password)
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      if (result.user) {
-        const userDoc = doc(db, "users", result.user.uid)
-        await setDoc(userDoc, {
-          email: email,
-          role: "user",
-          stripeId: null,
-          subscriptionId: null,
-          subscriptionStatus: null,
-          createdAt: Date.now()
-        })
-      } else {
-        throw new Error("User not found")
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to register');
       }
+
+      const data = await response.json();
+      console.log('User registered successfully:', data);
+
+      // Sign in the user client-side after successful registration
+      await signInWithEmailAndPassword(auth, email, password);
 
       router.push("/dashboard")
     } catch (error) {
-      console.log('Error signing up', error)
+      console.error('Error signing up', error);
+      alert(error instanceof Error ? error.message : 'An error occurred during registration');
     }
   }
 
